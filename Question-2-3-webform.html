@@ -27,25 +27,28 @@
     </head>
     <body>
         <h1>Feedback form</h1>
+        <p>Fields marked with an asterisk (*) are required.</p>
     <form>
-        <div class="control">
-          <label>Full name <span class="required">*</span></label><input id="name" name="name" type="text" />
+        <div class="control"> <!--Added for="name" to label to match with input ID, because NVDA wasn't announcing the label at the same time as the input-->
+          <label for="name">Full name <span class="required">*</span></label><input id="name" name="name" type="text" /> 
         </div>
-        <div class="control">
-          <label>Biography</label><textarea id="biography" name="biography" type="text"></textarea>
-          <span>Include examples on your skills in JavaScript.</span>
+        <div class="control"> <!--Added for="biography" to label to match with input ID, because NVDA wasn't announcing the label at the same time as the input-->
+          <label for="biography">Biography<span class="required">* <!--Added * because JS at the end requires it--> </span>
+          </label><textarea id="biography" name="biography" aria-describedby="TextAreaHelp"></textarea> 
+          <span id="TextAreaHelp">Include examples on your skills in JavaScript.</span> <!--Added aria-describedby to textarea to link it to read it at the same time as label-->
         </div>
         
-          <div>Gender</div>
-          <div class="control">
-            <input id="gender_male" name="gender" type="radio" value="male" /><label>Male</label>
+        <fieldset> <!--Since the client complained about it, for better understanding I grouped the radio buttons for genders together, but that also requires user to switch between genders using arrows, instead of tabbing-->
+          <legend>Gender <span class="required">*</span></legend> <!--Added * because JS at the end requires it-->
+          <div class="control"> <!--Added for="gender_male" to label to match with input ID, because NVDA wasn't announcing the radio box at the same time as the input-->
+            <input id="gender_male" name="gender" type="radio" value="male" /><label for="gender_male">Male</label>
           </div>
-          <div class="control">
-            <input id="gender_female" name="gender" type="radio" value="female" /><label>Female</label>
+          <div class="control"> <!--Added for="gender_female" to label to match with input ID, because NVDA wasn't announcing the radio box at the same time as the input-->
+            <input id="gender_female" name="gender" type="radio" value="female" /><label for="gender_female">Female</label>
           </div>
-        
-        <div class="control">
-          <input id="accept_agbs" name="accept_agbs" type="checkbox" value="1" /><label>I accept the terms and conditions</label>
+        </fieldset>
+        <div class="control"> <!--Added for="accept_agbs" to label to match with input ID, because NVDA wasn't announcing the checkbox at the same time as the input-->
+          <input id="accept_agbs" name="accept_agbs" type="checkbox" value="1" /><label for="accept_agbs">I accept the terms and conditions<span class="required">*</span></label> <!--Added * because JS at the end requires it-->
         </div>
         <div class="control">
           <input name="validate" type="hidden" value="1" /><input type="submit" value="Register" />
@@ -75,8 +78,8 @@
           $input = $('[name="' + input + '"]');
       
           if ((value = $.urlParam(input)) === null) {
-            if ($('fieldset.errors').length === 0) {
-              $('form').prepend('<fieldset class="errors"><legend>Errors</legend><ul></ul></fieldset>');
+            if ($('fieldset.errors').length === 0) { // tabindex="-1" added to fieldset.errors so that keyboard users can automatically focus on the errors field group when errors appear
+              $('form').prepend('<fieldset class="errors" tabindex="-1"><legend>Errors</legend><ul></ul></fieldset>'); 
             }
       
             $referencedElement = null;
@@ -92,7 +95,7 @@
               $referencedElement = $input;
             }
       // R.G. hint: fix next line ;)
-            $error = $('<a>' + message + '</a>');
+            $error = $('<a href="#">' + message + '</a>'); //Apparently pure <a> messages are not reachable by browsing the site with tab, so we need to modify them with href="#" to make them visible via tabbing through the site, and also to make them clickable/pressable
             $error.click(function (e) {
               // If we rely on the link's href pointing to the input's ID, it doesn't trigger forms mode in screen readers
               $referencedElement.focus();
@@ -125,8 +128,11 @@
             validateInput('gender', 'Please tell us your gender!');
             validateInput('accept_agbs', 'You must accept our terms and conditions!');
       
-            if ($('.error').length === 0) {
+            if ($('.errors').length === 0) {   // Changed .error to .errors because it was forcing to always show the alert even if all inputs are valid due to variable mismatch
               return alert('All inputs are valid.');
+            }
+            else {
+              $('.errors').focus(); // It shows a blue colour around the errors field group if it is submitted while any field required is missing
             }
           }
         });
