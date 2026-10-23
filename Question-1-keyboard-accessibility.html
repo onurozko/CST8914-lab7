@@ -25,7 +25,7 @@ a{
   color: #006b3a;
 }
 main a{
-  outline: none;
+  /* outline: none; Removed this line because I can't see when I'm focusing on some parts of website, especially links */
 }
 h2 {
   margin-top: 0;
@@ -206,7 +206,7 @@ article p {
       <nav class="menu">
         <a href="#">Home</a>
         <a href="#">Politics</a>
-        <a href="#" tabindex="-1">Business</a>
+        <a href="#">Business</a> <!-- Removed tabindex="-1" cuz it messes up the focus order -->
         <a href="#">Entertainment</a>
         <a href="#">Sports</a>
         <a href="#" class="btn-search pull-right"><img src="https://raw.githubusercontent.com/udacity/ud891/2de2a0688c68809a3b453db3a24b1a59e8401459/lesson2-focus/02-dom-order/images/search.svg" alt="Search" />Search</a> 
@@ -214,14 +214,7 @@ article p {
       </nav>
     </div>
   </header>
-  <div class="newsletter">
-    <div class="container">
-      <h3>Like the Funion? Consider joining our newsletter!</h3>
-      <input type="text">
-      <button type="button" onfocus="getFocus()">Sign up</button></div>
-      
-    </div>
-  </div>
+
   <main class="container">
     <h2 class="offscreen">Top story</h2>
     <article class="main-story">
@@ -239,11 +232,11 @@ article p {
     <div class="side-by-side">
       <div class="column">
         <div class="tier-header">
-          <h2 tabindex="0">In the news</h2>
+          <h2>In the news</h2> <!-- Removed tabindex="0" because it messes up the focus order -->
         </div>
         <article>
           <h3 class="headline">Bee wonders if maybe everyone else is a drone and he's the only one who has it "figured out."</h3>
-          <p><a href="#" tabindex="1"><b>Read More</b></a></p>
+          <p><a href="#"><b>Read More</b></a></p> <!-- Removed tabindex="1" because it messes up the focus order -->
           <img src="https://github.com/udacity/ud891/blob/gh-pages/lesson2-focus/02-dom-order/images/bee.jpg?raw=true" alt="A bee on top of a flower" />
         </article>
       </div>
@@ -284,6 +277,16 @@ article p {
         </article>
       </div>
     </div>
+  
+    <!--Moved newsletter to here because it was causing to jump from beginning of the page to the bottom of it while browsing through tab, and making it return back after it passes through bottom part-->
+    <div class="newsletter"> 
+    <div class="container">
+      <h3>Like the Funion? Consider joining our newsletter!</h3>
+      <input type="text">
+      <button type="button" onclick="getFocus()">Sign up</button></div> <!-- Removed onfocus="getFocus()" because it auto opens the url while focusing during navigation, and replaced it with onclick="getFocus()" to make it still clickable/pressable -->
+      
+    </div>
+  </div> <!-- I noticed that it is extra but, it doesn't cause any for keyboard accessibility, so didn't remove it -->
     
   </main>
   <!--   stuff can be added here :)
